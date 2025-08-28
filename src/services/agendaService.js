@@ -1,5 +1,5 @@
 const API_BASE_URL = "https://playground.4geeks.com/contact";
-const AGENDA_SLUG = "victormoreno";
+export const AGENDA_SLUG = "VictorMoreno";
 
 //Para verificar si la agenda ya existe
 let agendaVerified = false;

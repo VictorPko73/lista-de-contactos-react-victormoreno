@@ -6,121 +6,130 @@ import { createContact } from "../services/agendaService.js";
 export const FormularioAgregar = () => {
   const { dispatch } = useGlobalReducer();
   const navigate = useNavigate();
-  
+
   // Estado del formulario
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    address: ''
+    name: "",
+    email: "",
+    phone: "",
+    address: "",
   });
-  
+
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  /**
-   * Manejar cambios en los inputs del formulario
-   */
+  //Manejar cambios en los inputs del formulario
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
-  /**
-   * Validar formulario antes de enviar
-   */
+  //Validar formulario antes de enviar
+
   const validateForm = () => {
     const { name, email, phone, address } = formData;
-    
+
     if (!name.trim()) {
-      alert('Full Name is required');
+      alert("Full Name is required");
       return false;
     }
-    
+
     if (!email.trim()) {
-      alert('Email is required');
+      alert("Email is required");
       return false;
     }
-    
+
     if (!phone.trim()) {
-      alert('Phone is required');
+      alert("Phone is required");
       return false;
     }
-    
+
     if (!address.trim()) {
-      alert('Address is required');
+      alert("Address is required");
       return false;
     }
-    
+
     // Validación básica de email
+
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      alert('Please enter a valid email address');
+      alert("Please enter a valid email address");
       return false;
     }
-    
+
     return true;
   };
 
-  
-   //Enviar formulario para crear contacto
-   
+  //Enviar formulario para crear contacto
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     // Validar formulario
+
     if (!validateForm()) {
       return;
     }
-    
+
     setIsSubmitting(true);
-    
+
     try {
-      console.log('Creando nuevo contacto:', formData);
-      
+      console.log("Creando nuevo contacto:", formData);
+
       // Crear contacto en la API
       const newContact = await createContact(formData);
-      
+
       // Agregar al estado global
-      dispatch({ type: 'ADD_CONTACT', payload: newContact });
-      
-      console.log(' Contacto creado exitosamente:', newContact);
-      
+      dispatch({ type: "ADD_CONTACT", payload: newContact });
+
+      console.log(" Contacto creado exitosamente:", newContact);
+
       // Redirigir a la lista de contactos
-      navigate('/');
-      
+      navigate("/");
     } catch (error) {
-      console.error('Error creando contacto:', error);
-      alert('Error creating contact. Please try again.');
+      console.error("Error creando contacto:", error);
+      alert("Error creating contact. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <div className="container-fluid" style={{ backgroundColor: '#f8f9fa', minHeight: '100vh', padding: '15px' }}>
+    <div
+      className="container-fluid"
+      style={{
+        backgroundColor: "#f8f9fa",
+        minHeight: "100vh",
+        padding: "15px",
+      }}
+    >
       <div className="row justify-content-center">
         <div className="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-5">
-          
           {/* Contenedor principal */}
           <div className="bg-white rounded shadow-sm p-4 p-md-5">
-            
             {/* Título */}
-            <h1 className="text-center mb-4 fw-bold" style={{ 
-              fontSize: 'clamp(1.75rem, 6vw, 2.5rem)', 
-              color: '#333' 
-            }}>
+            <h1
+              className="text-center mb-4 fw-bold"
+              style={{
+                fontSize: "clamp(1.75rem, 6vw, 2.5rem)",
+                color: "#333",
+              }}
+            >
               Add a new contact
             </h1>
 
             {/* Formulario */}
             <form onSubmit={handleSubmit}>
-              
               {/* Full Name */}
               <div className="mb-3">
-                <label htmlFor="name" className="form-label fw-bold" style={{ fontSize: 'clamp(0.875rem, 3vw, 1rem)' }}>
+                <label
+                  htmlFor="name"
+                  className="form-label fw-bold"
+                  style={{ fontSize: "clamp(0.875rem, 3vw, 1rem)" }}
+                >
                   Full Name
                 </label>
                 <input
@@ -132,13 +141,17 @@ export const FormularioAgregar = () => {
                   value={formData.name}
                   onChange={handleInputChange}
                   disabled={isSubmitting}
-                  style={{ fontSize: 'clamp(0.875rem, 3vw, 1rem)' }}
+                  style={{ fontSize: "clamp(0.875rem, 3vw, 1rem)" }}
                 />
               </div>
 
               {/* Email */}
               <div className="mb-3">
-                <label htmlFor="email" className="form-label fw-bold" style={{ fontSize: 'clamp(0.875rem, 3vw, 1rem)' }}>
+                <label
+                  htmlFor="email"
+                  className="form-label fw-bold"
+                  style={{ fontSize: "clamp(0.875rem, 3vw, 1rem)" }}
+                >
                   Email
                 </label>
                 <input
@@ -150,13 +163,17 @@ export const FormularioAgregar = () => {
                   value={formData.email}
                   onChange={handleInputChange}
                   disabled={isSubmitting}
-                  style={{ fontSize: 'clamp(0.875rem, 3vw, 1rem)' }}
+                  style={{ fontSize: "clamp(0.875rem, 3vw, 1rem)" }}
                 />
               </div>
 
               {/* Phone */}
               <div className="mb-3">
-                <label htmlFor="phone" className="form-label fw-bold" style={{ fontSize: 'clamp(0.875rem, 3vw, 1rem)' }}>
+                <label
+                  htmlFor="phone"
+                  className="form-label fw-bold"
+                  style={{ fontSize: "clamp(0.875rem, 3vw, 1rem)" }}
+                >
                   Phone
                 </label>
                 <input
@@ -168,13 +185,17 @@ export const FormularioAgregar = () => {
                   value={formData.phone}
                   onChange={handleInputChange}
                   disabled={isSubmitting}
-                  style={{ fontSize: 'clamp(0.875rem, 3vw, 1rem)' }}
+                  style={{ fontSize: "clamp(0.875rem, 3vw, 1rem)" }}
                 />
               </div>
 
               {/* Address */}
               <div className="mb-4">
-                <label htmlFor="address" className="form-label fw-bold" style={{ fontSize: 'clamp(0.875rem, 3vw, 1rem)' }}>
+                <label
+                  htmlFor="address"
+                  className="form-label fw-bold"
+                  style={{ fontSize: "clamp(0.875rem, 3vw, 1rem)" }}
+                >
                   Address
                 </label>
                 <input
@@ -186,25 +207,28 @@ export const FormularioAgregar = () => {
                   value={formData.address}
                   onChange={handleInputChange}
                   disabled={isSubmitting}
-                  style={{ fontSize: 'clamp(0.875rem, 3vw, 1rem)' }}
+                  style={{ fontSize: "clamp(0.875rem, 3vw, 1rem)" }}
                 />
               </div>
 
               {/* Botón Save - Responsive */}
               <div className="d-grid mb-3">
-                <button 
-                  type="submit" 
+                <button
+                  type="submit"
                   className="btn btn-primary btn-lg py-3"
                   disabled={isSubmitting}
-                  style={{ 
-                    backgroundColor: '#007bff', 
-                    borderColor: '#007bff',
-                    fontSize: 'clamp(1rem, 4vw, 1.125rem)'
+                  style={{
+                    backgroundColor: "#007bff",
+                    borderColor: "#007bff",
+                    fontSize: "clamp(1rem, 4vw, 1.125rem)",
                   }}
                 >
                   {isSubmitting ? (
                     <>
-                      <span className="spinner-border spinner-border-sm me-2" role="status"></span>
+                      <span
+                        className="spinner-border spinner-border-sm me-2"
+                        role="status"
+                      ></span>
                       Creating...
                     </>
                   ) : (
@@ -218,12 +242,15 @@ export const FormularioAgregar = () => {
 
               {/* Link back to contacts - Responsive */}
               <div className="text-center">
-                <Link to="/" className="text-primary text-decoration-none" style={{ fontSize: 'clamp(0.875rem, 3vw, 1rem)' }}>
+                <Link
+                  to="/"
+                  className="text-primary text-decoration-none"
+                  style={{ fontSize: "clamp(0.875rem, 3vw, 1rem)" }}
+                >
                   <i className="fas fa-arrow-left me-2"></i>
                   or get back to contacts
                 </Link>
               </div>
-
             </form>
           </div>
         </div>

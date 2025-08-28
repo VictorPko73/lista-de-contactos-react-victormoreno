@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { AGENDA_SLUG } from "../services/agendaService";
 
 export const Navbar = () => {
   return (
@@ -8,7 +9,7 @@ export const Navbar = () => {
         {/* Brand - Responsive */}
         <Link className="navbar-brand fw-bold" to="/" style={{ fontSize: 'clamp(1.1rem, 4vw, 1.5rem)' }}>
           <i className="fas fa-address-book me-2"></i>
-          <span className="d-none d-sm-inline">Contact Agenda</span>
+          <span className="d-none d-sm-inline">Contact List for {AGENDA_SLUG}</span>
           <span className="d-sm-none">Contacts</span>
         </Link>
 
