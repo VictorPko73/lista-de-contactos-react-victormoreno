@@ -1,32 +1,80 @@
 export const initialStore=()=>{
   return{
-    message: null,
-    todos: [
-      {
-        id: 1,
-        title: "Make the bed",
-        background: null,
-      },
-      {
-        id: 2,
-        title: "Do my homework",
-        background: null,
-      }
-    ]
+   //Arry para almacenar todos los contactos
+   contacts: [],
+   //Para mostrar el estado de carga
+   isLoading: false,
+   //Mensaje para mostrar información o errores
+   message: null
   }
 }
 
 export default function storeReducer(store, action = {}) {
   switch(action.type){
-    case 'add_task':
-
-      const { id,  color } = action.payload
-
+    
+    case 'SET_LOADING':
       return {
         ...store,
-        todos: store.todos.map((todo) => (todo.id === id ? { ...todo, background: color } : todo))
+        isLoading: action.payload
+      };
+    
+    // Cargar todos los contactos desde la API
+    case 'LOAD_CONTACTS':
+      return {
+        ...store,
+        contacts: action.payload,
+        isLoading: false,
+        isInitialized: true
+      };
+    
+    // Marcar como inicializado
+    case 'SET_INITIALIZED':
+      return {
+        ...store,
+        isInitialized: action.payload
+      };
+    
+    // Agregar un nuevo contacto a la lista
+    case 'ADD_CONTACT':
+      return {
+        ...store,
+        contacts: [...store.contacts, action.payload],
+        message: 'Contacto agregado exitosamente'
+      };
+    
+    // Eliminar un contacto de la lista
+    case 'DELETE_CONTACT':
+      return {
+        ...store,
+        contacts: store.contacts.filter(contact => contact.id !== action.payload),
+        message: 'Contacto eliminado exitosamente'
+      };
+    
+    // Actualizar un contacto existente
+    case 'UPDATE_CONTACT':
+      return {
+        ...store,
+        contacts: store.contacts.map(contact => 
+          contact.id === action.payload.id ? action.payload : contact
+        ),
+        message: 'Contacto actualizado exitosamente'
+      };
+    
+    // Establecer mensaje (éxito o error)
+    case 'SET_MESSAGE':
+      return {
+        ...store,
+        message: action.payload
+      };
+    
+    // Limpiar mensaje
+    case 'CLEAR_MESSAGE':
+      return {
+        ...store,
+        message: null
       };
     default:
-      throw Error('Unknown action.');
+      throw Error(`Accion desconocida: ${action.type}`);
+
   }    
 }
