@@ -46,36 +46,41 @@ const ensureAgendaExists = async () => {
 export const getContacts = async (dispatch) => {
   try {
     await ensureAgendaExists();
-    dispatch({ type: 'SET_LOADING', payload: true });
+    dispatch({
+      type: "SET_LOADING",
+      payload: true,
+    });
     const response = await fetch(
       `${API_BASE_URL}/agendas/${AGENDA_SLUG}/contacts`
     );
     if (response.ok) {
       const data = await response.json();
-      dispatch({ 
-        type: 'LOAD_CONTACTS', 
-        payload: data.contacts || [] 
+      dispatch({
+        type: "LOAD_CONTACTS",
+        payload: data.contacts || [],
       });
-      console.log(`${data.contacts?.length || 0} contactos obtenidos`);
+
       return data.contacts || [];
     } else {
       console.error("Error obteniendo contactos:", response.status);
-      dispatch({ 
-        type: 'LOAD_CONTACTS', 
-        payload: [] });
+      dispatch({
+        type: "LOAD_CONTACTS",
+        payload: [],
+      });
       return [];
     }
   } catch (error) {
     console.error("Error en getContacts:", error);
-    dispatch({ 
-      type: 'LOAD_CONTACTS', 
-      payload: [] });
-    dispatch({ 
-      type: 'SET_LOADING', 
-      payload: false });
+    dispatch({
+      type: "LOAD_CONTACTS",
+      payload: [],
+    });
+    dispatch({
+      type: "SET_LOADING",
+      payload: false,
+    });
     return [];
   }
-  dispatch({ type: 'SET_LOADING', payload: false });
 };
 
 //Crear contacto
@@ -83,7 +88,7 @@ export const getContacts = async (dispatch) => {
 export const createContact = async (dispatch, contactData) => {
   try {
     await ensureAgendaExists();
-    dispatch({ type: 'SET_LOADING', payload: true });
+    dispatch({ type: "SET_LOADING", payload: true });
     const response = await fetch(
       `${API_BASE_URL}/agendas/${AGENDA_SLUG}/contacts`,
       {
@@ -96,14 +101,22 @@ export const createContact = async (dispatch, contactData) => {
     );
     if (response.ok) {
       const data = await response.json();
-      dispatch({ type: 'ADD_CONTACT', payload: data });
-      console.log("Contact creado con exito :", data);
-      dispatch({ type: 'SET_LOADING', payload: false });
+      dispatch({ 
+        type: "ADD_CONTACT", 
+        payload: data 
+      });
+      dispatch({ 
+        type: "SET_LOADING", 
+        payload: false 
+      });
       return data;
     }
   } catch (error) {
     console.error("Error al crear el contacto:", error);
-    dispatch({ type: 'SET_LOADING', payload: false });
+    dispatch({
+       type: "SET_LOADING", 
+       payload: false 
+      });
     throw error;
   }
 };
@@ -112,7 +125,7 @@ export const createContact = async (dispatch, contactData) => {
 
 export const updateContact = async (dispatch, contactId, contactData) => {
   try {
-    dispatch({ type: 'SET_LOADING', payload: true });
+    dispatch({ type: "SET_LOADING", payload: true });
     const response = await fetch(
       `${API_BASE_URL}/agendas/${AGENDA_SLUG}/contacts/${contactId}`,
       {
@@ -125,14 +138,19 @@ export const updateContact = async (dispatch, contactId, contactData) => {
     );
     if (response.ok) {
       const data = await response.json();
-      dispatch({ type: 'UPDATE_CONTACT', payload: data });
-      console.log("✅ Contacto actualizado exitosamente:", data);
-      dispatch({ type: 'SET_LOADING', payload: false });
+      dispatch({ 
+        type: "UPDATE_CONTACT",
+        payload: data 
+      });
+      dispatch({ type: "SET_LOADING", payload: false });
       return data;
     }
   } catch (error) {
-    console.error("❌ Error actualizando contacto:", error);
-    dispatch({ type: 'SET_LOADING', payload: false });
+    console.error("Error actualizando contacto:", error);
+    dispatch({ 
+      type: "SET_LOADING", 
+      payload: false 
+    });
     throw error;
   }
 };
@@ -141,7 +159,10 @@ export const updateContact = async (dispatch, contactId, contactData) => {
 
 export const deleteContact = async (dispatch, contactId) => {
   try {
-    dispatch({ type: 'SET_LOADING', payload: true });
+    dispatch({ 
+      type: "SET_LOADING",
+       payload: true
+       });
     const response = await fetch(
       `${API_BASE_URL}/agendas/${AGENDA_SLUG}/contacts/${contactId}`,
       {
@@ -149,14 +170,21 @@ export const deleteContact = async (dispatch, contactId) => {
       }
     );
     if (response.ok) {
-      dispatch({ type: 'DELETE_CONTACT', payload: contactId });
-      console.log("✅ Contacto eliminado correctamente");
-      dispatch({ type: 'SET_LOADING', payload: false });
+      dispatch({ 
+        type: "DELETE_CONTACT", 
+        payload: contactId 
+      });
+      dispatch({ 
+        type: "SET_LOADING",
+        payload: false 
+      });
       return true;
     }
   } catch (error) {
     console.error("Error eliminando contacto:", error);
-    dispatch({ type: 'SET_LOADING', payload: false });
+    dispatch({ 
+      type: "SET_LOADING", 
+      payload: false });
     return false;
   }
 };
@@ -165,18 +193,32 @@ export const deleteContact = async (dispatch, contactId) => {
 
 export const getContactById = async (dispatch, contactId) => {
   try {
-    dispatch({ type: 'SET_LOADING', payload: true });
-    const response = await fetch(`${API_BASE_URL}/agendas/${AGENDA_SLUG}/contacts/${contactId}`);
+    dispatch({ 
+      type: "SET_LOADING", 
+      payload: true
+     });
+    const response = await fetch(
+      `${API_BASE_URL}/agendas/${AGENDA_SLUG}/contacts/${contactId}`
+    );
     if (response.ok) {
       const data = await response.json();
-      dispatch({ type: 'SET_CURRENT_CONTACT', payload: data });
-      console.log('Contacto obtenido:', data);
-      dispatch({ type: 'SET_LOADING', payload: false });
+      dispatch({ 
+        type: "SET_CURRENT_CONTACT", 
+        payload: data 
+      });
+      console.log("Contacto obtenido:", data);
+      dispatch({ 
+        type: "SET_LOADING", 
+        payload: false
+       });
       return data;
     }
   } catch (error) {
-    console.error('Error obteniendo contacto:', error);
-    dispatch({ type: 'SET_LOADING', payload: false });
+    console.error("Error obteniendo contacto:", error);
+    dispatch({ 
+      type: "SET_LOADING",
+       payload: false 
+      });
     throw error;
   }
 };
