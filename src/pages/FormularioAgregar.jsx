@@ -4,7 +4,7 @@ import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
 import { createContact } from "../services/agendaService.js";
 
 export const FormularioAgregar = () => {
-  const { dispatch } = useGlobalReducer();
+  const {store,dispatch } = useGlobalReducer();
   const navigate = useNavigate();
 
   // Estado del formulario
@@ -78,23 +78,14 @@ export const FormularioAgregar = () => {
 
     try {
       console.log("Creando nuevo contacto:", formData);
-
-      // Crear contacto en la API
-      const newContact = await createContact(formData);
-
-      // Agregar al estado global
-      dispatch({ type: "ADD_CONTACT", payload: newContact });
-
-      console.log(" Contacto creado exitosamente:", newContact);
-
-      // Redirigir a la lista de contactos
+      await createContact(dispatch, formData);
+      console.log("Contacto creado exitosamente");
       navigate("/");
     } catch (error) {
       console.error("Error creando contacto:", error);
       alert("Error creating contact. Please try again.");
-    } finally {
-      setIsSubmitting(false);
     }
+    setIsSubmitting(false);
   };
 
   return (

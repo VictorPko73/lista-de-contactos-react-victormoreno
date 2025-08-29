@@ -99,23 +99,13 @@ export const FormularioEditar = () => {
 
     try {
       console.log("📝 Actualizando contacto:", formData);
-
-      // Actualizar contacto en la API
-      const updatedContact = await updateContact(parseInt(contactId), formData);
-
-      // Actualizar el estado global
-      dispatch({ type: "UPDATE_CONTACT", payload: updatedContact });
-
-      console.log("✅ Contacto actualizado exitosamente:", updatedContact);
-
-      // Redirigir a la lista de contactos
+      await updateContact(dispatch, parseInt(contactId), formData);
+      console.log("✅ Contacto actualizado exitosamente");
       navigate("/");
     } catch (error) {
-      console.error("❌ Error actualizando contacto:", error);
       alert("Error updating contact. Please try again.");
-    } finally {
-      setIsSubmitting(false);
     }
+    setIsSubmitting(false);
   };
 
   // Si el contacto no existe, mostrar mensaje de error

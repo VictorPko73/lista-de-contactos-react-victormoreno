@@ -15,22 +15,9 @@ export const ListaContacto = () => {
 
     const loadContacts = async () => {
       try {
-        dispatch({
-          type: "SET_LOADING",
-          payload: true,
-        });
-        const contacts = await getContacts();
-        dispatch({
-          type: "LOAD_CONTACTS",
-          payload: contacts,
-        });
+        await getContacts(dispatch);
       } catch (error) {
         console.error("Error cargando contactos:", error);
-      } finally {
-        dispatch({
-          type: "SET_LOADING",
-          payload: false,
-        });
       }
     };
     loadContacts();
@@ -48,20 +35,12 @@ export const ListaContacto = () => {
     if (contactToDelete) {
       try {
         console.log(`Eliminando contacto: ${contactToDelete.name}`);
-        const sucess = await deleteContact(contactToDelete.id);
-
-        if (sucess) {
-          dispatch({
-            type: "DELETE_CONTACT",
-            payload: contactToDelete.id,
-          });
-          console.log("Contacto eliminado exitosamente");
-        }
+        await deleteContact(dispatch, contactToDelete.id);
+        console.log("Contacto eliminado exitosamente");
       } catch (error) {
         console.log("Error eliminando contacto:", error);
       }
     }
-
     setShowDeleteModal(false);
     setContactToDelete(null);
   };

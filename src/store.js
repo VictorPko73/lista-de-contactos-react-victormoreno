@@ -77,4 +77,4 @@ export default function storeReducer(store, action = {}) {
       throw Error(`Accion desconocida: ${action.type}`);
 
   }    
-}
+} 
