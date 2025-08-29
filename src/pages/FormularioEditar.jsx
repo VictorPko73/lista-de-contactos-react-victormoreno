@@ -8,23 +8,13 @@ export const FormularioEditar = () => {
   const { contactId } = useParams();
   const navigate = useNavigate();
 
-  // Estado del formulario
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    address: "",
-  });
 
+  const [formData, setFormData] = useState({ name: "", email: "", phone: "", address: "" });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [contactFound, setContactFound] = useState(false);
 
-  
-  //Cargar datos del contacto al montar el componente
-  
   useEffect(() => {
     const contact = store.contacts.find((c) => c.id === parseInt(contactId));
-
     if (contact) {
       setFormData({
         name: contact.name || "",
@@ -33,74 +23,33 @@ export const FormularioEditar = () => {
         address: contact.address || "",
       });
       setContactFound(true);
-      console.log("✏️ Editando contacto:", contact);
     } else {
-      console.log("❌ Contacto no encontrado:", contactId);
       setContactFound(false);
     }
   }, [contactId, store.contacts]);
 
-//Manejar cambios en los inputs del formulario
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 //Validar formulario antes de enviar
 
   const validateForm = () => {
     const { name, email, phone, address } = formData;
-
-    if (!name.trim()) {
-      alert("Full Name is required");
-      return false;
-    }
-
-    if (!email.trim()) {
-      alert("Email is required");
-      return false;
-    }
-
-    if (!phone.trim()) {
-      alert("Phone is required");
-      return false;
-    }
-
-    if (!address.trim()) {
-      alert("Address is required");
-      return false;
-    }
-
-    // Validación básica de email
-
+    if (!name.trim()) { alert("Full Name is required"); return false; }
+    if (!email.trim()) { alert("Email is required"); return false; }
+    if (!phone.trim()) { alert("Phone is required"); return false; }
+    if (!address.trim()) { alert("Address is required"); return false; }
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      alert("Please enter a valid email address");
-      return false;
-    }
-
+    if (!emailRegex.test(email)) { alert("Please enter a valid email address"); return false; }
     return true;
   };
-
- //Enviar formulario para actualizar contacto
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Validar formulario
-    if (!validateForm()) {
-      return;
-    }
-
+    if (!validateForm()) return;
     setIsSubmitting(true);
-
     try {
-      console.log("📝 Actualizando contacto:", formData);
       await updateContact(dispatch, parseInt(contactId), formData);
-      console.log("✅ Contacto actualizado exitosamente");
       navigate("/");
     } catch (error) {
       alert("Error updating contact. Please try again.");

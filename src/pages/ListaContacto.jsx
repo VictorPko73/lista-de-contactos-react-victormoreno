@@ -1,4 +1,5 @@
-import { useEffect, useState, useRef } from "react";
+import { Modal } from 'react-native';
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
 import { getContacts, deleteContact } from "../services/agendaService.js";
@@ -7,45 +8,35 @@ export const ListaContacto = () => {
   const { store, dispatch } = useGlobalReducer();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [contactToDelete, setContactToDelete] = useState(null);
-  const initRef = useRef(false);
 
   useEffect(() => {
-    if (initRef.current || store.isInitialized) return;
-    initRef.current = true;
-
     const loadContacts = async () => {
       try {
         await getContacts(dispatch);
       } catch (error) {
-        console.error("Error cargando contactos:", error);
+        // Puedes mostrar un mensaje de error si lo deseas
       }
     };
     loadContacts();
-  }, [dispatch, store.isInitialized]);
+  }, [dispatch]);
 
-  // Confirmar eliminacion de contacto MIRAR SI ES NECESARIO
   const handleDeleteClick = (contact) => {
     setContactToDelete(contact);
     setShowDeleteModal(true);
   };
 
-  //Eliminar contacto
-
   const confirmDelete = async () => {
     if (contactToDelete) {
       try {
-        console.log(`Eliminando contacto: ${contactToDelete.name}`);
         await deleteContact(dispatch, contactToDelete.id);
-        console.log("Contacto eliminado exitosamente");
       } catch (error) {
-        console.log("Error eliminando contacto:", error);
+        // Puedes mostrar un mensaje de error si lo deseas
       }
     }
     setShowDeleteModal(false);
     setContactToDelete(null);
   };
 
-  //Cancelar eliminacion de contacto
   const cancelDelete = () => {
     setShowDeleteModal(false);
     setContactToDelete(null);
@@ -69,7 +60,7 @@ export const ListaContacto = () => {
               <div key={contact.id}>
                 <div className="p-3 p-md-4">
                   <div className="row align-items-center">
-                    {/* Avatar - Responsive */}
+                    {/* Avatar */}
                     <div className="col-3 col-sm-2">
                       <img
                         src={`https://picsum.photos/80/80?random=${contact.id}`}
@@ -84,7 +75,7 @@ export const ListaContacto = () => {
                       />
                     </div>
 
-                    {/* Información del contacto - Responsive */}
+                    {/* Información del contacto */}
                     <div className="col-6 col-sm-7 col-md-8">
                       <div className="ms-2 ms-md-3">
                         <h5
@@ -138,7 +129,7 @@ export const ListaContacto = () => {
                       </div>
                     </div>
 
-                    {/* Botones de acción - Responsive */}
+                    {/* Botones de acción */}
                     <div className="col-3 col-sm-3 col-md-2">
                       <div className="d-flex justify-content-end">
                         {/* Botón editar */}
@@ -184,7 +175,7 @@ export const ListaContacto = () => {
               </div>
             ))}
 
-            {/* Mensaje cuando no hay contactos - Responsive */}
+            {/* Mensaje cuando no hay contactos */}
             {store.contacts.length === 0 && !store.isLoading && (
               <div className="text-center py-4 py-md-5 px-3">
                 <i
@@ -213,7 +204,7 @@ export const ListaContacto = () => {
               </div>
             )}
 
-            {/* Loading - Responsive */}
+            {/* Loading */}
             {store.isLoading && (
               <div className="text-center py-4 py-md-5">
                 <div className="spinner-border text-primary" role="status">
@@ -226,7 +217,7 @@ export const ListaContacto = () => {
         </div>
       </div>
 
-      {/* Modal de confirmación para eliminar - Responsive */}
+  {/* Modal de confirmación para eliminar */}
       {showDeleteModal && (
         <div
           className="modal show d-flex mx-auto"
